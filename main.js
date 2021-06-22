@@ -1,6 +1,28 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import prettyBytes from 'pretty-bytes';
+
+const updateEndTime = (response) => {
+  response.custom = response.custom ?? {};
+  response.custom.time = new Date().getTime() - response.config.custom.startTime;
+
+  return response;
+};
+
+const updateEndTimeOnError = (error) => Promise.reject(updateEndTime(error.response));
+
+axios.interceptors.request.use((request) => {
+  request.custom = request.custom ?? {};
+  request.custom.startTime = new Date().getTime();
+
+  return request;
+});
+
+axios.interceptors.response.use(
+  updateEndTime,
+  updateEndTimeOnError
+);
 
 const form = document.querySelector('[data-form]');
 
@@ -14,6 +36,45 @@ const addQueryParamButton = document.querySelector('[data-add-query-param-btn]')
 const addRequestHeaderButton = document.querySelector('[data-add-request-header-btn]');
 
 const keyValueTemplate = document.querySelector('[data-key-value-template]');
+
+const responseSection = document.querySelector('[data-response-section]');
+const responseHeadersContainer = document.querySelector('[data-headers]');
+
+const showResponseSection = () => {
+  responseSection.classList.remove('d-none');
+};
+
+const updateResponseHeaders = (headers) => {
+  responseHeadersContainer.innerHTML = '';
+
+  Object.entries(headers).forEach(([key, value]) => {
+    const keyElement = document.createElement('div');
+    const valueElement = document.createElement('div');
+
+    keyElement.textContent = key;
+    valueElement.textContent = value;
+
+    responseHeadersContainer.append(keyElement, valueElement);
+  });
+};
+
+const updateResponseDetails = (response) => {
+  const { 
+    data,
+    status, 
+    headers,
+    custom: { time } 
+  } = response;
+
+  const size = prettyBytes(
+    JSON.stringify(data).length +
+    JSON.stringify(headers).length
+  );
+
+  document.querySelector('[data-status]').textContent = status;
+  document.querySelector('[data-time]').textContent = time;
+  document.querySelector('[data-size]').textContent = size;
+};
 
 const keyValuePairsToObject = (container) => {
   const pairs = container.querySelectorAll('[data-key-value-pair]');
@@ -59,8 +120,13 @@ const handleRequestSend = (event) => {
     params: keyValuePairsToObject(queryParamsContainer),
     headers: keyValuePairsToObject(requestHeadersContainer),
   })
-    .then(response => console.log(response.data))
-    .catch(console.error);
+    .catch((error) => error)
+    .then((response) => {
+      showResponseSection();
+      updateResponseDetails(response);
+      // updateResponseEditor(response.data);
+      updateResponseHeaders(response.headers);
+    });
 };
 
 queryParamsContainer.append(createKeyValuePair());
