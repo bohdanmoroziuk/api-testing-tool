@@ -11,12 +11,13 @@
 <body>
   
   <div class="p-4">
-    <form>
+    <form data-form>
       <div class="input-group mb-4">
         <select
           class="form-select flex-grow-0 w-auto"
           name="method"
           id="method-select"
+          data-method
         >
           <option value="get" selected>GET</option>
           <option value="post" selected>POST</option>
@@ -32,6 +33,7 @@
           id="url-input"
           placeholder="https://example.com"
           required
+          data-url
         >
         
         <button class="btn btn-primary" type="submit">Send</button>
