@@ -11,8 +11,157 @@
 <body>
   
   <div class="p-4">
+    <form>
+      <div class="input-group mb-4">
+        <select
+          class="form-select flex-grow-0 w-auto"
+          name="method"
+          id="method-select"
+        >
+          <option value="get" selected>GET</option>
+          <option value="post" selected>POST</option>
+          <option value="put" selected>PUT</option>
+          <option value="patch" selected>PATCH</option>
+          <option value="delete" selected>DELETE</option>
+        </select>
 
+        <input
+          class="form-control"
+          type="url"
+          name="url"
+          id="url-input"
+          placeholder="https://example.com"
+          required
+        >
+        
+        <button class="btn btn-primary" type="submit">Send</button>
+      </div>
+
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="query-params-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#query-params"
+            type="button"
+            role="tab"
+            aria-controls="query-params"
+            aria-selected="true"
+          >
+            Query Params
+          </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="request-headers-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#request-headers"
+            type="button"
+            role="tab"
+            aria-controls="request-headers"
+            aria-selected="false"
+          >
+            Headers
+          </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="json-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#json"
+            type="button"
+            role="tab"
+            aria-controls="json"
+            aria-selected="false"
+          >
+            JSON
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content p-3 border-top-0 border">
+        <div
+          class="tab-pane fade show active"
+          id="query-params"
+          role="tabpanel"
+          aria-labelledby="query-params-tab"
+        >
+          <div data-query-params></div>
+
+          <button
+            class="mt-2 btn btn-outline-success"
+            data-add-query-param-btn
+            type="button"
+          >
+            Add
+          </button>
+        </div>
+
+        <div
+          class="tab-pane fade"
+          id="request-headers"
+          role="tabpanel"
+          aria-labelledby="request-headers-tab"
+        >
+          <div data-request-headers></div>
+          
+          <button
+            class="mt-2 btn btn-outline-success"
+            data-add-request-header-btn
+            type="button"
+          >
+            Add
+          </button>
+        </div>
+
+        <div
+          class="tab-pane fade"
+          id="json"
+          role="tabpanel"
+          aria-labelledby="json-tab"
+        >
+          <div
+            class="overflow-auto"
+            data-json-request-body
+            style="max-height: 200px;"
+          >
+          </div>
+        </div>
+      </div>
+    </form>
   </div>
+
+  <template data-key-value-template>
+    <div
+      class="input-group my-2"
+      data-key-value-pair  
+    >
+      <input
+        class="form-control"
+        type="text"
+        data-key
+        placeholder="Key"
+      >
+      <input
+        class="form-control"
+        type="text"
+        data-value
+        placeholder="Value"
+      >
+      <button
+        class="btn btn-outline-danger"
+        type="button"
+        data-remove-btn
+      >
+        Remove
+      </button>
+    </div>
+  </template>
 
 </body>
 </html>
