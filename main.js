@@ -3,6 +3,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import prettyBytes from 'pretty-bytes';
 
+import setupEditors from './editor';
+
+const { requestEditor, updateResponseEditor } = setupEditors();
+
 const updateEndTime = (response) => {
   response.custom = response.custom ?? {};
   response.custom.time = new Date().getTime() - response.config.custom.startTime;
@@ -124,7 +128,7 @@ const handleRequestSend = (event) => {
     .then((response) => {
       showResponseSection();
       updateResponseDetails(response);
-      // updateResponseEditor(response.data);
+      updateResponseEditor(response.data);
       updateResponseHeaders(response.headers);
     });
 };
