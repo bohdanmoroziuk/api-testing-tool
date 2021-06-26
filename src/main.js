@@ -1,32 +1,11 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import axios from 'axios';
 import prettyBytes from 'pretty-bytes';
 
+import httpClient from './http-client';
 import setupEditors from './editor';
 
 const { requestEditor, updateResponseEditor } = setupEditors();
-
-const updateEndTime = (response) => {
-  response.custom = response.custom ?? {};
-  response.custom.time = new Date().getTime() - response.config.custom.startTime;
-
-  return response;
-};
-
-const updateEndTimeOnError = (error) => Promise.reject(updateEndTime(error.response));
-
-axios.interceptors.request.use((request) => {
-  request.custom = request.custom ?? {};
-  request.custom.startTime = new Date().getTime();
-
-  return request;
-});
-
-axios.interceptors.response.use(
-  updateEndTime,
-  updateEndTimeOnError
-);
 
 const form = document.querySelector('[data-form]');
 
@@ -127,7 +106,7 @@ const handleRequestSend = (event) => {
     return;
   }
 
-  axios({
+  httpClient.request({
     url: urlInput.value,
     method: methodSelect.value,
     params: keyValuePairsToObject(queryParamsContainer),
