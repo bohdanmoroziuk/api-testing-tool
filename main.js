@@ -118,11 +118,21 @@ const createKeyValuePair = () => {
 const handleRequestSend = (event) => {
   event.preventDefault();
 
+  let data = null;
+
+  try {
+    data = JSON.parse(requestEditor.state.doc.toString() || null);
+  } catch (error) {
+    alert('JSON data is malformed');
+    return;
+  }
+
   axios({
     url: urlInput.value,
     method: methodSelect.value,
     params: keyValuePairsToObject(queryParamsContainer),
     headers: keyValuePairsToObject(requestHeadersContainer),
+    data,
   })
     .catch((error) => error)
     .then((response) => {
