@@ -5,7 +5,7 @@ import prettyBytes from 'pretty-bytes';
 import httpClient from './http-client';
 import setupEditors from './editor';
 
-const { requestEditor, updateResponseEditor } = setupEditors();
+const { getRequestEditorContent, updateResponseEditorContent } = setupEditors();
 
 const form = document.querySelector('[data-form]');
 
@@ -100,7 +100,7 @@ const handleRequestSend = (event) => {
   let data = null;
 
   try {
-    data = JSON.parse(requestEditor.state.doc.toString() || null);
+    data = JSON.parse(getRequestEditorContent());
   } catch (error) {
     alert('JSON data is malformed');
     return;
@@ -117,8 +117,8 @@ const handleRequestSend = (event) => {
     .then((response) => {
       showResponseSection();
       updateResponseDetails(response);
-      updateResponseEditor(response.data);
       updateResponseHeaders(response.headers);
+      updateResponseEditorContent(response.data);
     });
 };
 

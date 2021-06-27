@@ -39,7 +39,11 @@ const setupEditors = () => {
     parent: jsonResponseBody,
   });
 
-  const updateResponseEditor = (value) => {
+  const getRequestEditorContent = () => {
+    return requestEditor.state.doc.toString() || null;
+  };
+
+  const updateResponseEditorContent = (value) => {
     responseEditor.dispatch({
       changes: {
         from: 0,
@@ -50,9 +54,8 @@ const setupEditors = () => {
   };
 
   return {
-    requestEditor,
-    responseEditor,
-    updateResponseEditor,
+    getRequestEditorContent,
+    updateResponseEditorContent,
   };
 };
 
